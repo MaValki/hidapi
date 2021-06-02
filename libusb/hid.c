@@ -1258,12 +1258,12 @@ int HID_API_EXPORT hid_get_feature_report(hid_device *dev, unsigned char *data, 
 		skipped_report_id = 1;
 	}
 	res = libusb_control_transfer(dev->device_handle,
-		LIBUSB_REQUEST_TYPE_CLASS|LIBUSB_RECIPIENT_INTERFACE|LIBUSB_ENDPOINT_IN,
-		0x01/*HID get_report*/,
-		(3/*HID feature*/ << 8) | report_number,
+		LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_IN,
+		LIBUSB_REQUEST_GET_DESCRIPTOR,
+		(LIBUSB_DT_REPORT << 8),
 		dev->interface,
-		(unsigned char *)data, length,
-		1000/*timeout millis*/);
+		data, length,
+		1000);
 
 	if (res < 0)
 		return -1;
